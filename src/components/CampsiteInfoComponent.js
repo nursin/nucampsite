@@ -1,16 +1,34 @@
 import React, { Component } from 'react'
-import { Card, CardImg, CardImgOverlay, CardText, CardBody, CardTitle } from 'reactstrap';
+import { Card, CardImg, CardText, CardBody, CardTitle } from 'reactstrap';
 
 class CampsiteInfo extends Component {
   
+  renderComments(comments) {
+    if (comments) {
+      return (
+        <div className="col-md-5 m-1">
+          <h4>Comments</h4>
+          {console.log(comments)}
+          {comments.map(comment =>
+          <div className="mb-3" key={comment.id}>
+            <div> {comment.text}</div>
+            <div>-- {comment.author}, {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))} </div>
+          </div>
+          )}
+        </div>
+      );
+    }
+  }
+
   renderCampsite(campsite) {
     return (
       <div className="col-md-5 m-1">
-        <Card onClick={() => this.onCampsiteSelect(campsite)}>
-          <CardImg width="100%" src={campsite.image} alt={campsite.name} />
-          <CardImgOverlay className="text-center">
-            <CardTitle>{campsite.name}</CardTitle>
-          </CardImgOverlay>
+        <Card>
+            <CardImg top src={campsite.image} alt={campsite.name} />
+              <CardBody>
+                  <CardTitle>{campsite.name}</CardTitle>
+                  <CardText>{campsite.description}</CardText>
+              </CardBody>
         </Card>
       </div>
     );
@@ -21,14 +39,13 @@ class CampsiteInfo extends Component {
     if (this.props.campsite) {
       return (
         <div className="row">
-          {this.renderCampsite(this.props.campsite)}
+            {this.renderCampsite(this.props.campsite)}
+            {this.renderComments(this.props.campsite.comments)}
         </div>
       );
     } else {
       return (
-        <div>
-
-        </div>
+        <div/>
       );
     }
   }
